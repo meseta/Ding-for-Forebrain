@@ -1,0 +1,196 @@
+
+./build/main.o:     file format elf32-littlearm
+
+
+Disassembly of section .text.SysTickEmpty:
+
+00000000 <Tick>:
+#if SYSTICK_EN
+	void SysTickInit(void);
+	void SysTickStop(void);
+	volatile unsigned int SysTicks, SysTickDelayTicks;
+	
+	static inline void SysTickEmpty(void) { return; }
+   0:	4770      	bx	lr
+
+Disassembly of section .text.startup.main:
+
+00000000 <main>:
+#include "lpc13xx.h"
+#include "uafunc.h"
+
+#define NUMBER	10
+
+int main(void) {
+   0:	b570      	push	{r4, r5, r6, lr}
+   2:	2328      	movs	r3, #40	; 0x28
+   4:	b086      	sub	sp, #24
+   6:	2500      	movs	r5, #0
+	unsigned char data1[NUMBER], data2[NUMBER], i, correct;
+	
+	for(i=0; i<NUMBER; i++) {
+		data1[i] = i;
+		data2[i] = i+40;
+   8:	ae03      	add	r6, sp, #12
+   a:	55ab      	strb	r3, [r5, r6]
+
+int main(void) {
+	unsigned char data1[NUMBER], data2[NUMBER], i, correct;
+	
+	for(i=0; i<NUMBER; i++) {
+		data1[i] = i;
+   c:	f80d 5005 	strb.w	r5, [sp, r5]
+		data2[i] = i+40;
+  10:	3501      	adds	r5, #1
+  12:	3301      	adds	r3, #1
+#define NUMBER	10
+
+int main(void) {
+	unsigned char data1[NUMBER], data2[NUMBER], i, correct;
+	
+	for(i=0; i<NUMBER; i++) {
+  14:	2d0a      	cmp	r5, #10
+		data1[i] = i;
+		data2[i] = i+40;
+  16:	b2db      	uxtb	r3, r3
+#define NUMBER	10
+
+int main(void) {
+	unsigned char data1[NUMBER], data2[NUMBER], i, correct;
+	
+	for(i=0; i<NUMBER; i++) {
+  18:	d1f6      	bne.n	8 <main+0x8>
+}
+
+static inline void LEDOn(unsigned short pins) {	LPC_GPIO3->DATA &= ~pins;	}
+static inline void LEDOff(unsigned short pins) {	LPC_GPIO3->DATA |= pins;	}
+static inline void LEDToggle(unsigned short pins) {	LPC_GPIO3->DATA ^= pins;	}
+static inline void LEDInit(unsigned short pins) {	Port3Init(pins);	Port3SetOut(pins);	LEDOff(pins);	}
+  1a:	f640 70ff 	movw	r0, #4095	; 0xfff
+  1e:	f7ff fffe 	bl	0 <Port3Init>
+static inline void Port2SetIn(unsigned short pins) {	LPC_GPIO2->DIR &= ~pins;	}
+static inline void Port3SetIn(unsigned short pins) {	LPC_GPIO3->DIR &= ~pins;	}
+static inline void Port0SetOut(unsigned short pins) {	LPC_GPIO0->DIR |= pins;	}
+static inline void Port1SetOut(unsigned short pins) {	LPC_GPIO1->DIR |= pins;	}
+static inline void Port2SetOut(unsigned short pins) {	LPC_GPIO2->DIR |= pins;	}
+static inline void Port3SetOut(unsigned short pins) {	LPC_GPIO3->DIR |= pins;	}
+  22:	4a28      	ldr	r2, [pc, #160]	; (c4 <main+0xc4>)
+	if(LPC_GPIO3->DATA & pins) return 1;
+	else return 0;
+}
+
+static inline void LEDOn(unsigned short pins) {	LPC_GPIO3->DATA &= ~pins;	}
+static inline void LEDOff(unsigned short pins) {	LPC_GPIO3->DATA |= pins;	}
+  24:	4c28      	ldr	r4, [pc, #160]	; (c8 <main+0xc8>)
+static inline void Port2SetIn(unsigned short pins) {	LPC_GPIO2->DIR &= ~pins;	}
+static inline void Port3SetIn(unsigned short pins) {	LPC_GPIO3->DIR &= ~pins;	}
+static inline void Port0SetOut(unsigned short pins) {	LPC_GPIO0->DIR |= pins;	}
+static inline void Port1SetOut(unsigned short pins) {	LPC_GPIO1->DIR |= pins;	}
+static inline void Port2SetOut(unsigned short pins) {	LPC_GPIO2->DIR |= pins;	}
+static inline void Port3SetOut(unsigned short pins) {	LPC_GPIO3->DIR |= pins;	}
+  26:	6813      	ldr	r3, [r2, #0]
+	
+	
+	LEDInit(ALL);
+	LEDOn(ALL);
+	
+	Delay(1000);
+  28:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
+  2c:	ea6f 3313 	mvn.w	r3, r3, lsr #12
+  30:	ea6f 3303 	mvn.w	r3, r3, lsl #12
+  34:	6013      	str	r3, [r2, #0]
+	if(LPC_GPIO3->DATA & pins) return 1;
+	else return 0;
+}
+
+static inline void LEDOn(unsigned short pins) {	LPC_GPIO3->DATA &= ~pins;	}
+static inline void LEDOff(unsigned short pins) {	LPC_GPIO3->DATA |= pins;	}
+  36:	6fe3      	ldr	r3, [r4, #124]	; 0x7c
+  38:	ea6f 3313 	mvn.w	r3, r3, lsr #12
+  3c:	ea6f 3303 	mvn.w	r3, r3, lsl #12
+  40:	67e3      	str	r3, [r4, #124]	; 0x7c
+static inline unsigned char Port3Read(unsigned short pins) {
+	if(LPC_GPIO3->DATA & pins) return 1;
+	else return 0;
+}
+
+static inline void LEDOn(unsigned short pins) {	LPC_GPIO3->DATA &= ~pins;	}
+  42:	6fe3      	ldr	r3, [r4, #124]	; 0x7c
+  44:	f423 637e 	bic.w	r3, r3, #4064	; 0xfe0
+  48:	f023 031f 	bic.w	r3, r3, #31
+  4c:	67e3      	str	r3, [r4, #124]	; 0x7c
+  4e:	f7ff fffe 	bl	0 <Delay>
+static inline void LEDOff(unsigned short pins) {	LPC_GPIO3->DATA |= pins;	}
+  52:	6fe3      	ldr	r3, [r4, #124]	; 0x7c
+	
+	LEDOff(LED0);
+	I2CInit(100, MASTER);
+  54:	2100      	movs	r1, #0
+  56:	f043 0301 	orr.w	r3, r3, #1
+  5a:	67e3      	str	r3, [r4, #124]	; 0x7c
+  5c:	2064      	movs	r0, #100	; 0x64
+  5e:	f7ff fffe 	bl	0 <I2CInit>
+	
+	Delay(500);
+  62:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
+  66:	f7ff fffe 	bl	0 <Delay>
+  6a:	6fe3      	ldr	r3, [r4, #124]	; 0x7c
+	LEDOff(LED1);
+	EEPROMBulkWrite(1337, data1, NUMBER);
+  6c:	4669      	mov	r1, sp
+  6e:	f043 0302 	orr.w	r3, r3, #2
+  72:	67e3      	str	r3, [r4, #124]	; 0x7c
+  74:	462a      	mov	r2, r5
+  76:	f240 5039 	movw	r0, #1337	; 0x539
+  7a:	f7ff fffe 	bl	0 <EEPROMBulkWrite>
+	
+	Delay(500);
+  7e:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
+  82:	f7ff fffe 	bl	0 <Delay>
+  86:	6fe3      	ldr	r3, [r4, #124]	; 0x7c
+	LEDOff(LED2);
+	EEPROMBulkRead(1337, data2, NUMBER);
+  88:	462a      	mov	r2, r5
+  8a:	f043 0304 	orr.w	r3, r3, #4
+  8e:	67e3      	str	r3, [r4, #124]	; 0x7c
+  90:	f240 5039 	movw	r0, #1337	; 0x539
+  94:	4631      	mov	r1, r6
+  96:	f7ff fffe 	bl	0 <EEPROMBulkRead>
+  9a:	2300      	movs	r3, #0
+
+	correct = 0;
+  9c:	461a      	mov	r2, r3
+	for(i=0; i<NUMBER; i++) {
+		if(data1[i] == data2[i]) {
+  9e:	a903      	add	r1, sp, #12
+  a0:	f81d 0003 	ldrb.w	r0, [sp, r3]
+  a4:	5c59      	ldrb	r1, [r3, r1]
+  a6:	4288      	cmp	r0, r1
+  a8:	d101      	bne.n	ae <main+0xae>
+			correct ++;
+  aa:	3201      	adds	r2, #1
+  ac:	b2d2      	uxtb	r2, r2
+  ae:	3301      	adds	r3, #1
+	Delay(500);
+	LEDOff(LED2);
+	EEPROMBulkRead(1337, data2, NUMBER);
+
+	correct = 0;
+	for(i=0; i<NUMBER; i++) {
+  b0:	2b0a      	cmp	r3, #10
+  b2:	d1f4      	bne.n	9e <main+0x9e>
+		if(data1[i] == data2[i]) {
+			correct ++;
+		}
+	}
+	
+	if(correct == NUMBER) {
+  b4:	2a0a      	cmp	r2, #10
+  b6:	bf01      	itttt	eq
+  b8:	4b03      	ldreq	r3, [pc, #12]	; (c8 <main+0xc8>)
+  ba:	6fda      	ldreq	r2, [r3, #124]	; 0x7c
+  bc:	f042 0208 	orreq.w	r2, r2, #8
+  c0:	67da      	streq	r2, [r3, #124]	; 0x7c
+  c2:	e7fe      	b.n	c2 <main+0xc2>
+  c4:	50038000 	.word	0x50038000
+  c8:	50033f80 	.word	0x50033f80
