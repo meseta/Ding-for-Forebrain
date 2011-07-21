@@ -1,0 +1,6 @@
+Universal Air Ltd.'s source code and binaries (http://www.universalair.co.uk/) 
+are released under the BSD license, see the file LICENSE_UA_BSD.txt for
+details.
+
+The USB library from Signal 11 (http://www.signal11.us/oss/hidapi/) is made
+available under the BSD license, see the file LICENSE_S11_BSD.txt for details.
