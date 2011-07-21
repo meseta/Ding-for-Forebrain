@@ -13,16 +13,16 @@
 /******************************************************************************
  * Misc Config
  *****************************************************************************/
-#define IAP_EN					1			// Set to 1 to enable the IAP functions like Reprogram() (set to 0 to disable and save some RAM)
+#define IAP_EN				1			// Set to 1 to enable the IAP functions like Reprogram() (set to 0 to disable and save some RAM)
  
  
  /******************************************************************************
  * Clock Config
  *****************************************************************************/
 #define SYSTICK_EN			1			// Set to 1 to enable SysTick (set to 0 to disable and save some RAM)
-#define SYSTICK_MS			10			// SysTick period in milliseconds
+#define SYSTICK_MS			1			// SysTick period in milliseconds
 
-#define WDT_EN				1			// Set to 1 to enable WDT (set to 0 to disable and save some RAM)
+#define WDT_EN				0			// Set to 1 to enable WDT (set to 0 to disable and save some RAM)
 #define WDT_MS				1000		// WDT period in milliseconds (max 14400000 = 4 hours
 #define WDT_MODE			0			// WDT mode: 0=reset, 1=interrupt
 
@@ -37,11 +37,11 @@
 #define USB_EN				1			// Set to 1 to enable USB HID
 
 #define USB_VENDOR_ID		0x1FC9		// The default NXP Vendor ID is 0x1FC9
-#define USB_PRODUCT_ID		0x0003
+#define USB_PRODUCT_ID		0xbe11
 #define USB_DEVICE_ID		0x0001
-#define USB_IN_BYTES		1			// The number of bytes for the input report (Forebrain to computer) (max. 64)
-#define USB_OUT_BYTES		1			// The number of bytes for the output report (computer to Forebrain) (max. 64)
-#define USB_SAMPLE			200			// Sample interval (in ms - up to 255, although it looks like 33ms is max)
+#define USB_IN_BYTES		2			// The number of bytes for the input report (Forebrain to computer) (max. 64)
+#define USB_OUT_BYTES		6			// The number of bytes for the output report (computer to Forebrain) (max. 64)
+#define USB_SAMPLE			255			// Sample interval (in ms - up to 255, although it looks like 33ms is max)
 
 /******************************************************************************
  * UART Config

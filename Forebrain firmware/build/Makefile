@@ -50,9 +50,9 @@ firmware: $(OBJS)
 	-@echo "*** Converting... ***"
 	$(OBJCOPY) $(OCFLAGS) -O binary $(PRJPATH)/firmware.elf firmware.bin
 	-@echo ""
-	-@echo "*** Producint disassembly listing... ***"
-	$(OBJDUMP) -d -S $(PRJPATH)/main.o > $(PRJPATH)/disassembly.lst
-	-@echo ""
+	#-@echo "*** Producint disassembly listing... ***"
+	#$(OBJDUMP) -d -S $(PRJPATH)/main.o > $(PRJPATH)/disassembly.lst
+	#-@echo ""
 	-@echo "*** Adding Checksum... ***"
 	$(CHKSM) firmware.bin
 	-@echo ""

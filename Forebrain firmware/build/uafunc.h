@@ -26,15 +26,9 @@ extern void GeneralFault(void);
 
 /******************************************************************************
  * Misc Functions
- * Miscellaneous useful functions
- *
- * delay() - delay in milliseconds.  This function is very approximate, do not
- * 		use for accurate timing
  *****************************************************************************/
-void Delay(unsigned int milliseconds);
-
+ 
 #if IAP_EN
-
 	typedef void (*IAP)(unsigned int [], unsigned int []);
 	unsigned int IAPCommand[5], IAPResult[4];
 	void Reprogram(void);
@@ -42,20 +36,11 @@ void Delay(unsigned int milliseconds);
 
 /******************************************************************************
  * Clock Functions
- * These functions set up the LPC1343's clocks, systick, and watchdog timer
- *
- * SysTickInit() and SysTickStop() - sets up or stops the SysTick timer, which
- *		will generate an interrupt every 10ms, the function SysTick_Handler()
- *		handles the interrupt (the user should supply this function).  The
- *		interrupt period can be changed in config.h
- * WDTInit() - sets up the watchdog timer, which will either generate an
- *		and interrupt, or reset the chip if it times out without being "fed"
- *		in the case of interrupt, the user should supply the WDT_IRQHandler()
- *		function.  The watchdog timer is supplied with the timeout time in ms
- *		from 1ms up to a maximum of 4 hours
- * WDTFeed() - Feeds the watchdog to prevent interrupt or reset
  *****************************************************************************/
-// Clocks
+
+void Delay(unsigned int milliseconds);
+void WaitDelay(unsigned int milliseconds);
+ 
 #if SYSTICK_EN
 	void SysTickInit(void);
 	void SysTickStop(void);
@@ -63,44 +48,21 @@ void Delay(unsigned int milliseconds);
 	
 	static inline void SysTickEmpty(void) { return; }
 	void Tick(void) WEAK_ALIAS(SysTickEmpty);
+	
+	void SysTickDelay(unsigned int milliseconds);
 #endif
 
 #if WDT_EN
 	void WDTInit(void);
 	static inline void WDTFeed(void) {	LPC_WDT->FEED = 0xAA; LPC_WDT->FEED = 0x55;	}
 #endif
+
 /******************************************************************************
  * Power mode Functions
- * These functions use the LPC1343's power modes, reset, and BOD modes
  *****************************************************************************/
 
 /******************************************************************************
  * GPIO Functions
- * These functions use the digital input and output functions, the functions
- * for each port are separated.
- * 
- * Port#Init() - set up the specified  pins for that port as input/outputs
- * 		with pull-up resistors enabled by default (where approriate)
- *		note: running Port0Init(ALL) or Port#Init(PIN0) will set Port 0 Pin 0
- * 			to digital IO mode, this means that the RESET button will no longer
- *			cause a reset (this can be desireable so that the RESET button can
- *			be used as a regular button).  To avoid this, run
- *		GPIO0Init(ALL & ~PIN0);
- * 			note: Port#Init() for all four ports are run for ALL (except
- *			Port 0 Pin 0) automatically at start/reset, so it is not necessary
- *			to run at the start of user code
- * Port#SetIn() and Port#SetOut() - set input or output of specified 
- * Port#Write() - set specified pin states
- * Port#Toggle() - toggle specified pin state
- * Port#Read() - read specified pin states
- * Port#Hysteresis() - turn on or off hysteresis for specified pins
- * Port#Resistor() - pull-up/down resistors for specified pins
- * 		note: Port 0 pins 4 and 5 do not have hysteresis and pull-up/down
- *		resistors
- *
- * LEDon() and LEDoff() - turn on and off the specified LEDs on Port 3
- * LEDtoggle() - toggle the specified LEDs on Port 3
-
  *****************************************************************************/
 #define PIN0		0x001
 #define PIN1		0x002
@@ -196,25 +158,10 @@ void Port3Pull(unsigned short pins, unsigned char value);
 
 /******************************************************************************
  * USB HID functions
- * These functions make use of LPC1343's HID ROM code  to communicate with a
- * computer over USB HID, simply run USBInit() to initialise (and USBStop() to
- * disable.  Data can then be sent to the computer using USBIn(), and received
- * from the computer using USBOut().  The user should write their own USBIn()
- * and USBOut() function.
- * 
- * There is no need to call these functions from within user code: USBIn() will
- * be automatically triggered (by USB polling from the computer); USBOut() will
- * automatically run when Forebrain receives data from the computer
- *
- * The Vendor ID, Product ID, Device ID, can be changed in config.h,
- * manufacturer descriptor string, product descriptor string, and serial number
- * string can also be changed in the page uafunc.c
- *
- * WARNING: do NOT use Timer 32B1 when using USB HID
  *****************************************************************************/
 #if USB_EN
-	void USBIn(unsigned char USBdata[], unsigned int USBlength);
-	void USBOut(unsigned char USBdata[], unsigned int USBlength);
+	void USBIn(unsigned char USBData[], unsigned int USBLength);
+	void USBOut(unsigned char USBData[], unsigned int USBLength);
 	void USBInit(void);
 	void USBStop(void);
 
@@ -251,21 +198,10 @@ void Port3Pull(unsigned short pins, unsigned char value);
 #endif
 /******************************************************************************
  * UART Functions
- * These functions allow the LPC1343 to communicate over its UART hardware
  *****************************************************************************/
 
 /******************************************************************************
  * I2C Functions
- * These functions allow the LPC1343 to communicate over its I2C hardware in
- * master mode.  Use I2CInit() and I2CStop() to initialise or stop
- * 
- * To use I2C to send or receive data, set the variables I2CWriteLength,
- * I2CReadLength, I2CMasterBuffer and then run I2CEngine();
- *
- * EEPROMRead() - read a byte of data from the address,
- * EEPROMWrite() - write a byte of data to the address
- * 		note: the 24FC256 takes a maximum of 5ms to commit the write, avoid
- * 			performing any EEPROM reads/writes within 5ms of the previous write
  *****************************************************************************/
 #if I2C_EN
 	#define I2C_IDLE			0
@@ -304,12 +240,10 @@ void Port3Pull(unsigned short pins, unsigned char value);
 
 /******************************************************************************
  * SSP/SPI Functions
- * These functions allows the LPC1343 to communicate over its SSP/SPI hardware
  *****************************************************************************/
 
 /******************************************************************************
  * Timer Functions
- * These functions set up the LPC1343's timer hardware (including for PWM)
  *****************************************************************************/
 
 // Mode: 0=timer, 1=counter, 2=hardware PWM
@@ -329,7 +263,6 @@ void Port3Pull(unsigned short pins, unsigned char value);
 
 /******************************************************************************
  * ADC Functions
- * These functions use the LPC1343's analogue to digital converter
  *****************************************************************************/
 #define CHN0		0x01
 #define CHN1		0x02

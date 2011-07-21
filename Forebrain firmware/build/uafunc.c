@@ -13,17 +13,6 @@
 /******************************************************************************
  * Misc Functions
  *****************************************************************************/
-void Delay(unsigned int milliseconds) {
-	#if SYSTICK
-		SysTickDelayTicks = 0;
-		while(SysTickDelayTicks < milliseconds/SYSTICK_MS);
-	#else
-		volatile unsigned int i, j;
-		for(j=0; j<milliseconds; j++) {
-			for(i=0; i<6000; i++);
-		}
-	#endif
-}
 
 #if IAP_EN
 	IAP iap_entry = (IAP)0x1fff1ff1;
@@ -41,7 +30,20 @@ void Delay(unsigned int milliseconds) {
 /******************************************************************************
  * Clock Functions
  *****************************************************************************/
-// Clocks
+void Delay(unsigned int milliseconds) {
+	#if SYSTICK_EN
+		SysTickDelay(milliseconds);
+	#else
+		WaitDelay(milliseconds);
+	#endif
+}
+ 
+void WaitDelay(unsigned int milliseconds) {
+	volatile unsigned int i, j;
+	for(j=0; j<milliseconds; j++) {
+		for(i=0; i<6000; i++);
+	}
+}
 
 #if SYSTICK_EN
 	// ****** SysTick functions
@@ -59,12 +61,11 @@ void Delay(unsigned int milliseconds) {
 		SysTickDelayTicks++;
 		Tick();
 	}
-	
-	void SysTickDelay(unsigned int ticks) {
+ 
+	void SysTickDelay(unsigned int milliseconds) {
 		SysTickDelayTicks = 0;
-		while(SysTickDelayTicks < ticks);
+		while(SysTickDelayTicks < milliseconds/SYSTICK_MS);
 	}
-	
 #endif
 
 #if WDT_EN
@@ -293,7 +294,7 @@ void Port3Pull(unsigned short pins, unsigned char value) {
 		0x04, 3, 0x08, 0x09,					// Language Code (0x0809 is UK English)
 		0x1c, 3, 'N',0,'X',0,'P',0,' ',0,'S',0,'E',0,'M',0,'I',0,'C',0,'O',0,'N',0,'D',0,' ',0,	// Manufacturer String
 		0x28, 3, 'N',0,'X',0,'P',0,' ',0, 'L',0,'P',0,'C',0,'1',0,'3',0,'X',0,'X',0,' ',0,'H',0,'I',0,'D',0, ' ',0,' ',0, ' ',0, ' ',0,	// Product String
-		0x1a, 3, 'F',0,'B',0,'R',0,'H',0,'I',0,'D',0,'0',0,'O',0,'O',0,	// Serial Number String
+		0x1a, 3, 'D',0,'I',0,'N',0,'G',0,'0',0,'0',0,'0',0,'0',0,'0',0,	// Serial Number String
 		0x0e, 3, 'H',0,'I',0,'D',0,' ',0,' ',0,' ',0,	// Interface 0, Setting 0
 	};
 
